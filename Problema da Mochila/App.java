@@ -143,28 +143,25 @@ public class App {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'solucaoInteligente'");
     }
-
     
-    public static List<List<Item>> permutations(List<Item> items) {
-        List<List<Item>> result = new ArrayList<>();
-        permuteHelper(items, new ArrayList<>(), result);
-        return result;
+    public static List<List<Integer>> getAllSubsets(List<Item> items) {
+        List<List<Integer>> subsets = new ArrayList<>();
+        generateSubsets(items, 0, new ArrayList<>(), subsets);
+        return subsets;
     }
-    
 
-    private static void permuteHelper(List<Item> items, List<Item> current, List<List<Item>> result) {
-        if (current.size() == items.size()) {
-            result.add(new ArrayList<>(current));
+    private static void generateSubsets(List<Item> items, int index, List<Integer> current, List<List<Integer>> subsets) {
+        if (index == items.size()) {
+            subsets.add(new ArrayList<>(current));
             return;
         }
-        
-        for (Item item : items) {
-            if (current.contains(item)) {
-                continue; 
-            }
-            current.add(item); 
-            permuteHelper(items, current, result);
-            current.remove(current.size() - 1);
-        }
+
+        // Include the current item
+        current.add(items.get(index).getId());
+        generateSubsets(items, index + 1, current, subsets);
+
+        // Exclude the current item
+        current.remove(current.size() - 1);
+        generateSubsets(items, index + 1, current, subsets);
     }
 }

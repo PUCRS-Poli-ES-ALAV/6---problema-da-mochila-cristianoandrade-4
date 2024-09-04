@@ -18,6 +18,10 @@ public class Mochila{
         return false;
     }
 
+    public Item get(int index) {
+        return mochila.get(index);
+    }
+
     public List<Integer> getIds(){
         List<Integer> list = new ArrayList<>();
 
