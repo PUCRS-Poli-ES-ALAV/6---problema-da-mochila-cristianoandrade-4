@@ -1,40 +1,41 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mochila {
+public class Mochila{
 
-    private List<Item> items;
     private int capacity;
-
-    public Mochila(List<Item> items, int capacity) {
-        this.items = items;
+    private List<Item> mochila;
+    
+    public Mochila(int capacity) {
         this.capacity = capacity;
-        run();
+        mochila = new ArrayList<>();
     }
 
-    private static void run() {
-
-    }
-
-    public static List<List<Item>> permutations(List<Item> items) {
-        List<List<Item>> result = new ArrayList<>();
-        permuteHelper(items, new ArrayList<>(), result);
-        return result;
-    }
-
-     private static void permuteHelper(List<Item> items, List<Item> current, List<List<Item>> result) {
-        if (current.size() == items.size()) {
-            result.add(new ArrayList<>(current));
-            return;
+    public boolean addItem(Item item) {
+        if (mochila.size() < capacity) {
+            return mochila.add(item);
         }
-        
-        for (Item item : items) {
-            if (current.contains(item)) {
-                continue; 
-            }
-            current.add(item); 
-            permuteHelper(items, current, result);
-            current.remove(current.size() - 1);
-        }
+        return false;
     }
+
+    public List<Integer> getIds(){
+        List<Integer> list = new ArrayList<>();
+
+        for(Item item : mochila) {
+            list.add(item.getId());
+        }
+
+        return list;
+    }
+
+    public boolean removeItem(Item item) {
+        if (getIds().contains(item.getId())) {
+            return mochila.remove(item);
+        }
+
+        return false;
+    }
+
+
+
 }
