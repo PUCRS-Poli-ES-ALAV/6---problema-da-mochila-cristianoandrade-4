@@ -14,9 +14,17 @@ public class Item{
         return this.valor;
     }
 
+    public void setValor(int valor) {
+        this.valor = valor;
+    }
+
     public Integer getPeso() {
         return this.peso;
     }   
+
+    public void setPeso(int peso) {
+        this.peso = peso;
+    }
     
     public Integer getId() {
         return this.id;

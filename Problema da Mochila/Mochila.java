@@ -18,7 +18,7 @@ public class Mochila{
         return false;
     }
 
-    public Item get(int index) {
+    public Item getItem(int index) {
         return mochila.get(index);
     }
 
@@ -40,6 +40,13 @@ public class Mochila{
         return false;
     }
 
+    public int getCapacidade() {
+        return capacity;
+    }
+
+    public void setCapacidade(int capacity) {
+        this.capacity = capacity;
+    }
 
 
 }
