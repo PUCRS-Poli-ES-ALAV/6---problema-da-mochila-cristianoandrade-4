@@ -279,7 +279,8 @@ public class App {
         System.out.println("-- índice, id, peso, valor -- Peso total= " + sumOfListById(idsOfGreater));
         for (Item item : greater) {
             String str = String.valueOf(item.getId());
-            System.out.println((Integer.parseInt(str.substring(str.length()-1))+1) + ", " + item.getId() + ", " + item.getPeso() + ", " + item.getValor());
+            int indice = Integer.parseInt(str.substring(str.length()-1));
+            System.out.println(indice+1 + ", " + item.getId() + ", " + item.getPeso() + ", " + item.getValor());
             System.out.println();
         }
     }
