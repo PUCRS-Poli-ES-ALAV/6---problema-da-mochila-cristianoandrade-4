@@ -77,28 +77,28 @@ public class App {
     private static void executarOpcao(int choice, List<Item> items, Mochila mochila) {
         switch (choice) {
             case 1:
-                addItemCatalogoManual(items);
+                addItemCatalogoManual();
                 break;
             case 2:
-                addItemCatalogoArquivo(items);
+                addItemCatalogoArquivo();
                 break;
             case 3:
-                removeItemCatalogo(items);
+                removeItemCatalogo();
                 break;
             case 4:
-                editarItemCatalogo(items); 
+                editarItemCatalogo(); 
                 break;
             case 5:
-                listarCatalogo(items);
+                listarCatalogo();
                 break;
             case 6:
-                editarMochila(mochila);
+                editarMochila();
                 break;
             case 7:
-                solucaoForcaBruta(items, mochila);
+                solucaoForcaBruta();
                 break;
             case 8:
-                solucaoInteligente(items, mochila);
+                solucaoInteligente();
                 break;
             default:
                 System.out.println("Opção inválida. Escolha uma das opções.");
@@ -106,7 +106,7 @@ public class App {
         }
     }
 
-    private static void addItemCatalogoManual(List<Item> items) {
+    private static void addItemCatalogoManual() {
         Scanner entrada = new Scanner(System.in);
 
         int peso = obterValorValido(entrada, "Insira peso do item: ");
@@ -118,7 +118,7 @@ public class App {
     }
 
     
-    private static void addItemCatalogoArquivo(List<Item> items) {
+    private static void addItemCatalogoArquivo() {
         if (jaCarregouDeArquivo) {
             System.out.println("Arquivo já carregado!");
             return;
@@ -163,7 +163,7 @@ public class App {
         }
     }
     
-    private static void removeItemCatalogo(List<Item> items) {
+    private static void removeItemCatalogo() {
         if (items.isEmpty()) {
             System.out.println("O catálogo está vazio. Não há itens para remover.");
             return;
@@ -175,7 +175,7 @@ public class App {
 
         while (!ok) {
             try {
-                listarCatalogo(items);
+                listarCatalogo();
 
                 System.out.print("Insira o índice do item a ser removido (1 a " + items.size() + "): ");
                 index = entrada.nextInt();
@@ -196,14 +196,14 @@ public class App {
         System.out.println("Item removido com sucesso.");
     }
     
-    private static void editarItemCatalogo(List<Item> items) {
+    private static void editarItemCatalogo() {
         if (items.isEmpty()) {
             System.out.println("O catálogo está vazio. Não há itens para editar.");
             return;
         }
     
         Scanner entrada = new Scanner(System.in);
-        listarCatalogo(items);
+        listarCatalogo();
     
         int index = -1;
         boolean ok = false;
@@ -235,7 +235,7 @@ public class App {
     }
 
     
-    private static void listarCatalogo(List<Item> items) {
+    private static void listarCatalogo() {
         System.out.println("Catálogo Atual:");
         Item item;
         int peso;
@@ -250,7 +250,7 @@ public class App {
         }
     }
     
-    private static void editarMochila(Mochila mochila) {
+    private static void editarMochila() {
         Scanner entrada = new Scanner(System.in);
 
         int novaCapacidade = obterValorValido(entrada, "Insira nova capacidade da mochila (atual: " + mochila.getCapacidade() + "): ");
@@ -259,14 +259,67 @@ public class App {
         System.out.println("Capacidade atualizada com sucesso!");
     }
     
-    private static void solucaoForcaBruta(List<Item> items, Mochila mochila) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solucao'");
+    private static void solucaoForcaBruta() {
+        List<List<Integer>> subsets = getAllSubsets(items);
+        List<List<Integer>> valid_subsets = new ArrayList<>();
+
+        for (List<Integer> list : subsets) {
+            if (sumOfListById(list) <= mochila.getCapacidade()) {
+                valid_subsets.add(list);
+            }
+        }
+
+        List<Integer> idsOfGreater = greaterOfListById(valid_subsets);
+        List<Item> greater = new ArrayList<>();
+        
+        for (int id : idsOfGreater) {
+            greater.add(getById(id));
+        }
+        
+        System.out.println("-- índice, id, peso, valor -- Peso total= " + sumOfListById(idsOfGreater));
+        for (Item item : greater) {
+            String str = String.valueOf(item.getId());
+            System.out.println((Integer.parseInt(str.substring(str.length()-1))+1) + ", " + item.getId() + ", " + item.getPeso() + ", " + item.getValor());
+            System.out.println();
+        }
     }
     
-    private static void solucaoInteligente(List<Item> items, Mochila mochila) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'solucaoInteligente'");
+    private static void solucaoInteligente() {
+        // TODO
+    }
+
+    private static List<Integer> greaterOfListById(List<List<Integer>> list) {
+        List<Integer> greater = list.get(0);
+        int sum = sumOfListById(greater);
+
+        for (int i = 1; i < list.size(); i++) {
+            if (sumOfListById(list.get(i)) > sum) {
+                greater = list.get(i);
+            }
+        }
+
+        return greater;
+    }
+
+    private static int sumOfListById(List<Integer> list) {
+        int sum = 0;
+
+        Item item;
+        for (int id : list) {
+            item = getById(id);
+            sum += item.getPeso();
+        }
+
+        return sum;
+    }
+
+    private static Item getById(int id) {
+        for (Item item : items) {
+            if (item.getId() == id) {
+                return item;
+            }
+        }
+        return null;
     }
     
     public static List<List<Integer>> getAllSubsets(List<Item> items) {
